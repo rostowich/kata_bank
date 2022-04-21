@@ -1,11 +1,10 @@
 import com.lacombedulionvert.kata_bank.Account;
 import com.lacombedulionvert.kata_bank.AccountOperationRepository;
-import com.lacombedulionvert.kata_bank.Operation;
+import com.lacombedulionvert.kata_bank.AccountOperation;
 import com.lacombedulionvert.kata_bank.StatementPrinter;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.BDDMockito;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
@@ -14,6 +13,7 @@ import javax.naming.OperationNotSupportedException;
 import java.util.Arrays;
 import java.util.List;
 
+import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -46,8 +46,8 @@ public class AccountShould {
 
     @Test
     public void print_a_statement() throws OperationNotSupportedException {
-        List<Operation> operations = Arrays.asList(new Operation());
-        BDDMockito.given(accountOperationRepository.getHistory()).willReturn(operations);
+        List<AccountOperation> operations = Arrays.asList(new AccountOperation());
+        given(accountOperationRepository.getHistory()).willReturn(operations);
         account.printStatement();
         verify(accountOperationRepository).getHistory();
         verify(statementPrinter).print(operations);
