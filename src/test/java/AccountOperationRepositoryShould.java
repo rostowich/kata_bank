@@ -19,7 +19,6 @@ import static com.lacombedulionvert.kata_bank.OperationType.*;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.verify;
 
 @RunWith(MockitoJUnitRunner.class)
 public class AccountOperationRepositoryShould {
@@ -28,18 +27,18 @@ public class AccountOperationRepositoryShould {
     private DateProvider dateProvider;
 
     private AccountOperationRepository accountOperationRepository;
+    List<AccountOperation> operations;
 
     @Before
     public void initialize(){
         accountOperationRepository = new AccountOperationRepository(dateProvider);
-    }
-    @Test
-    public void create_and_add_a_deposit_operation() throws OperationNotSupportedException {
-        List<AccountOperation> operations = accountOperationRepository.getHistory();
-        assertThat(operations.size(), is(0)) ;
-        
+        operations = accountOperationRepository.getHistory();
         given(dateProvider.getCurrentDate()).willReturn(LocalDate.of(2022,04,21));
 
+    }
+    @Test
+    public void create_and_add_a_deposit_operation() {
+        assertThat(operations.size(), is(0)) ;
         accountOperationRepository.addDeposit(300);
 
         assertThat(operations.size(), is(1)) ;
@@ -47,6 +46,19 @@ public class AccountOperationRepositoryShould {
                 LocalDate.of(2022,04,21),
                 DEPOSIT,
                 300
+        )));
+    }
+
+    @Test
+    public void create_and_add_a_withdrawal_operation() throws OperationNotSupportedException {
+        assertThat(operations.size(), is(0)) ;
+        accountOperationRepository.addWithdrawal(250);
+
+        assertThat(operations.size(), is(1)) ;
+        assertThat(operations.get(0), is(new AccountOperation(
+                LocalDate.of(2022,04,21),
+                WITHDRAWAL,
+                250
         )));
 
     }

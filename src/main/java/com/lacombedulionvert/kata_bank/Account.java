@@ -12,15 +12,15 @@ public class Account {
         this.statementPrinter = statementPrinter;
     }
 
-    public void makeDeposit(int amount) throws OperationNotSupportedException {
+    public void makeDeposit(int amount) {
         accountOperationRepository.addDeposit(amount);
     }
 
-    public void makeWithdrawal(int amount) throws OperationNotSupportedException {
+    public void makeWithdrawal(int amount) {
         accountOperationRepository.addWithdrawal(amount);
     }
 
-    public void printStatement() throws OperationNotSupportedException {
+    public void printStatement() {
         statementPrinter.print(accountOperationRepository.getHistory());
     }
 }

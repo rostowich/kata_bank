@@ -1,6 +1,5 @@
 package com.lacombedulionvert.kata_bank;
 
-import javax.naming.OperationNotSupportedException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,8 +24,13 @@ public class AccountOperationRepository {
         operations.add(deposit);
     }
 
-    public void addWithdrawal(int amount) throws OperationNotSupportedException {
-        throw new OperationNotSupportedException("Not yet implemented");
+    public void addWithdrawal(int amount) {
+        AccountOperation withdrawal = new AccountOperation(
+                dateProvider.getCurrentDate(),
+                WITHDRAWAL,
+                amount
+        );
+        operations.add(withdrawal);
     }
 
     public List<AccountOperation> getHistory() {
