@@ -3,12 +3,15 @@ package com.lacombedulionvert.kata_bank;
 public class Account {
 
     private final AccountOperationRepository accountOperationRepository;
-    private final HistoryFormatter historyFormatter;
-    private final int OVERDRAFT_AMOUNT = 500;
+    private final OperationHistoryFormatter historyFormatter;
+    private final int overdraftAmount;
 
-    public Account(AccountOperationRepository accountOperationRepository, HistoryFormatter historyFormatter) {
+    public Account(AccountOperationRepository accountOperationRepository,
+                   OperationHistoryFormatter historyFormatter,
+                   int overdraftAmount) {
         this.accountOperationRepository = accountOperationRepository;
         this.historyFormatter = historyFormatter;
+        this.overdraftAmount = overdraftAmount;
     }
 
     public void makeDeposit(int amount) {
@@ -16,7 +19,7 @@ public class Account {
     }
 
     public void makeWithdrawal(int amount) throws NotEnoughAmountException {
-        if(amount > this.balance() + OVERDRAFT_AMOUNT)
+        if(amount > this.balance() + this.overdraftAmount)
             throw new NotEnoughAmountException("Not enough amount in the account");
         accountOperationRepository.addWithdrawal(amount);
     }
@@ -27,7 +30,7 @@ public class Account {
 
     private int balance(){
         return accountOperationRepository.getHistory().stream()
-                    .mapToInt(accountOperation -> accountOperation.getSignedAmount())
+                    .mapToInt(AccountOperation::getSignedAmount)
                     .sum();
     }
 }

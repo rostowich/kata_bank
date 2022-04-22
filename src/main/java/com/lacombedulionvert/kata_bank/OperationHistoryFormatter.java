@@ -7,9 +7,10 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
-public class HistoryFormatter {
+public class OperationHistoryFormatter {
 
-    private static final DateTimeFormatter formatter= DateTimeFormatter.ofPattern("dd/MM/YYYY");
+    private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+
     public String format(List<AccountOperation> operations) {
         AtomicInteger currentBalance = new AtomicInteger(0);
         List<String> operationFormattedInChronologicalOrder =

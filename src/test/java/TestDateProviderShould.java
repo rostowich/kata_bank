@@ -5,7 +5,7 @@ import java.time.LocalDate;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class DateProviderShould {
+public class TestDateProviderShould {
 
     @Test
     public void return_today_date(){
@@ -13,12 +13,12 @@ public class DateProviderShould {
 
         LocalDate todayDate = testableDateProvider.getCurrentDate();
 
-        assertThat(todayDate).isEqualTo(LocalDate.of(2022,04,21));
+        assertThat(todayDate).isEqualTo(LocalDate.of(2022,4,21));
     }
 
-    private class TestableDateProvider extends DateProvider {
+    private static class TestableDateProvider extends DateProvider {
         public LocalDate getCurrentDate(){
-            return LocalDate.of(2022,04,21);
+            return LocalDate.of(2022,4,21);
         }
     }
 }

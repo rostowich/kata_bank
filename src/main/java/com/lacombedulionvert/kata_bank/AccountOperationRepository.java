@@ -1,9 +1,7 @@
 package com.lacombedulionvert.kata_bank;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static com.lacombedulionvert.kata_bank.OperationType.*;
 
@@ -11,10 +9,11 @@ public class AccountOperationRepository {
 
     private final DateProvider dateProvider;
 
-    private List<AccountOperation> operations = new ArrayList<>();
+    private final List<AccountOperation> operations;
 
     public AccountOperationRepository(DateProvider dateProvider) {
         this.dateProvider = dateProvider;
+        operations = new ArrayList<>();
     }
 
     public void addDeposit(int amount) {

@@ -7,12 +7,9 @@ import static com.lacombedulionvert.kata_bank.OperationType.*;
 
 public class AccountOperation {
 
-    private LocalDate date;
-    private OperationType operationType;
-    private int amount;
-
-    public AccountOperation() {
-    }
+    private final LocalDate date;
+    private final OperationType operationType;
+    private final int amount;
 
     public AccountOperation(LocalDate date, OperationType operationType, int amount) {
         this.date = date;

@@ -6,7 +6,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDate;
@@ -18,7 +17,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
 
 @ExtendWith(MockitoExtension.class)
-public class AccountOperationRepositoryShould {
+public class TestAccountOperationRepositoryShould {
 
     @Mock
     private DateProvider dateProvider;
@@ -29,8 +28,8 @@ public class AccountOperationRepositoryShould {
     public void initialize(){
         accountOperationRepository = new AccountOperationRepository(dateProvider);
         given(dateProvider.getCurrentDate())
-                .willReturn(LocalDate.of(2022,04,21))
-                .willReturn(LocalDate.of(2022,04,22));
+                .willReturn(LocalDate.of(2022,4,21))
+                .willReturn(LocalDate.of(2022,4,22));
 
     }
     @Test
@@ -43,7 +42,7 @@ public class AccountOperationRepositoryShould {
 
         assertThat(historyAfterDeposit.size()).isOne() ;
         assertThat(historyAfterDeposit.get(0)).isEqualTo(new AccountOperation(
-                LocalDate.of(2022,04,21),
+                LocalDate.of(2022,4,21),
                 DEPOSIT,
                 300
         ));
@@ -59,7 +58,7 @@ public class AccountOperationRepositoryShould {
 
         assertThat(historyAfterWithdrawal.size()).isOne();
         assertThat(historyAfterWithdrawal.get(0)).isEqualTo(new AccountOperation(
-                LocalDate.of(2022,04,21),
+                LocalDate.of(2022,4,21),
                 WITHDRAWAL,
                 250
         ));
@@ -77,12 +76,12 @@ public class AccountOperationRepositoryShould {
 
         assertThat(expected.size()).isEqualTo(2);
         assertThat(expected.get(0)).isEqualTo(new AccountOperation(
-                LocalDate.of(2022,04,21),
+                LocalDate.of(2022,4,21),
                 DEPOSIT,
                 300
         ));
         assertThat(expected.get(1)).isEqualTo(new AccountOperation(
-                LocalDate.of(2022,04,22),
+                LocalDate.of(2022,4,22),
                 WITHDRAWAL,
                 250
         ));

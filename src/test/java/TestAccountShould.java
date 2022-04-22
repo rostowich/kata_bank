@@ -7,23 +7,21 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import static com.lacombedulionvert.kata_bank.OperationType.*;
-import static com.lacombedulionvert.kata_bank.OperationType.WITHDRAWAL;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
-public class AccountShould {
+public class TestAccountShould {
 
     @Mock
     AccountOperationRepository accountOperationRepository;
 
     @Mock
-    HistoryFormatter statementPrinter;
+    OperationHistoryFormatter statementPrinter;
 
     private Account account;
 
@@ -31,15 +29,15 @@ public class AccountShould {
 
     @BeforeEach
     public void initialize(){
-        account = new Account(accountOperationRepository, statementPrinter);
+        account = new Account(accountOperationRepository, statementPrinter, 500);
         operations = new ArrayList<>();
         AccountOperation deposit = new AccountOperation(
-                LocalDate.of(2022, 04, 21),
+                LocalDate.of(2022, 4, 21),
                 DEPOSIT,
                 500
         );
         AccountOperation withdrawal = new AccountOperation(
-                LocalDate.of(2022, 04, 22),
+                LocalDate.of(2022, 4, 22),
                 WITHDRAWAL,
                 400
         );
@@ -72,12 +70,16 @@ public class AccountShould {
         String actualMessage = exception.getMessage();
 
         assertInstanceOf(exceptedException, exception);
-        assertTrue(actualMessage.equals(expectedMessage));
+        assertEquals(actualMessage, expectedMessage);
     }
 
     @Test
     public void print_a_statement() {
-        List<AccountOperation> operations = Arrays.asList(new AccountOperation());
+        List<AccountOperation> operations = List.of(new AccountOperation(
+                LocalDate.now(),
+                DEPOSIT,
+                300
+        ));
         given(accountOperationRepository.getHistory()).willReturn(operations);
 
         account.seeOperationHistory();
