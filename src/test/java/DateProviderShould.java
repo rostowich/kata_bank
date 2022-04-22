@@ -1,11 +1,9 @@
 import com.lacombedulionvert.kata_bank.DateProvider;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
 
-import static org.hamcrest.core.Is.is;
-import static org.junit.Assert.assertThat;
-
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class DateProviderShould {
 
@@ -15,7 +13,7 @@ public class DateProviderShould {
 
         LocalDate todayDate = testableDateProvider.getCurrentDate();
 
-        assertThat(todayDate, is(LocalDate.of(2022,04,21)));
+        assertThat(todayDate).isEqualTo(LocalDate.of(2022,04,21));
     }
 
     private class TestableDateProvider extends DateProvider {

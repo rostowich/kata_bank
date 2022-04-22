@@ -1,22 +1,23 @@
-import com.lacombedulionvert.kata_bank.Account;
-import com.lacombedulionvert.kata_bank.AccountOperationRepository;
-import com.lacombedulionvert.kata_bank.AccountOperation;
-import com.lacombedulionvert.kata_bank.StatementPrinter;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import com.lacombedulionvert.kata_bank.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 
-import javax.naming.OperationNotSupportedException;
-
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import static com.lacombedulionvert.kata_bank.OperationType.*;
+import static com.lacombedulionvert.kata_bank.OperationType.WITHDRAWAL;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class AccountShould {
 
     @Mock
@@ -27,25 +28,55 @@ public class AccountShould {
 
     private Account account;
 
-    @Before
+    private List<AccountOperation> operations;
+
+    @BeforeEach
     public void initialize(){
         account = new Account(accountOperationRepository, statementPrinter);
+        operations = new ArrayList<>();
+        AccountOperation deposit = new AccountOperation(
+                LocalDate.of(2022, 04, 21),
+                DEPOSIT,
+                500
+        );
+        AccountOperation withdrawal = new AccountOperation(
+                LocalDate.of(2022, 04, 22),
+                WITHDRAWAL,
+                400
+        );
+        operations.add(deposit);
+        operations.add(withdrawal);
     }
 
     @Test
-    public void add_a_deposit_operation() throws OperationNotSupportedException {
+    public void add_a_deposit_operation() {
         account.makeDeposit(200);
         verify(accountOperationRepository).addDeposit(200);
     }
 
     @Test
-    public void add_a_withdrawal_operation() throws OperationNotSupportedException {
+    public void add_a_withdrawal_operation() throws NotEnoughAmountException {
+        given(accountOperationRepository.getHistory()).willReturn(new ArrayList<>());
         account.makeWithdrawal(200);
         verify(accountOperationRepository).addWithdrawal(200);
     }
 
     @Test
-    public void print_a_statement() throws OperationNotSupportedException {
+    public void add_a_withdrawal_operation_having_not_enough_amount_into_the_account()
+            throws NotEnoughAmountException {
+        given(accountOperationRepository.getHistory()).willReturn(operations);
+
+        Exception exception = assertThrows(NotEnoughAmountException.class,
+                () ->  account.makeWithdrawal(700));
+
+        String expectedMessage = "Not enough amount in the account";
+        String actualMessage = exception.getMessage();
+
+        assertTrue(actualMessage.equals(expectedMessage));
+    }
+
+    @Test
+    public void print_a_statement() {
         List<AccountOperation> operations = Arrays.asList(new AccountOperation());
         given(accountOperationRepository.getHistory()).willReturn(operations);
         account.seeOperationHistory();
