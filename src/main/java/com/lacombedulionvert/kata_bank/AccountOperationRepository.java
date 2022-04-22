@@ -36,8 +36,6 @@ public class AccountOperationRepository {
     }
 
     public List<AccountOperation> getHistory() {
-        return operations.stream()
-                .sorted(Comparator.comparing(AccountOperation::getDate))
-                .collect(Collectors.toList());
+        return operations;
     }
 }

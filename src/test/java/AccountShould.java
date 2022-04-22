@@ -12,8 +12,7 @@ import java.util.List;
 
 import static com.lacombedulionvert.kata_bank.OperationType.*;
 import static com.lacombedulionvert.kata_bank.OperationType.WITHDRAWAL;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 
@@ -24,7 +23,7 @@ public class AccountShould {
     AccountOperationRepository accountOperationRepository;
 
     @Mock
-    StatementPrinter statementPrinter;
+    HistoryFormatter statementPrinter;
 
     private Account account;
 
@@ -62,16 +61,17 @@ public class AccountShould {
     }
 
     @Test
-    public void add_a_withdrawal_operation_having_not_enough_amount_into_the_account()
-            throws NotEnoughAmountException {
+    public void add_a_withdrawal_operation_having_not_enough_amount_into_the_account() {
         given(accountOperationRepository.getHistory()).willReturn(operations);
 
         Exception exception = assertThrows(NotEnoughAmountException.class,
                 () ->  account.makeWithdrawal(700));
 
+        Class<NotEnoughAmountException> exceptedException = NotEnoughAmountException.class;
         String expectedMessage = "Not enough amount in the account";
         String actualMessage = exception.getMessage();
 
+        assertInstanceOf(exceptedException, exception);
         assertTrue(actualMessage.equals(expectedMessage));
     }
 
@@ -79,8 +79,10 @@ public class AccountShould {
     public void print_a_statement() {
         List<AccountOperation> operations = Arrays.asList(new AccountOperation());
         given(accountOperationRepository.getHistory()).willReturn(operations);
+
         account.seeOperationHistory();
+
         verify(accountOperationRepository).getHistory();
-        verify(statementPrinter).print(operations);
+        verify(statementPrinter).format(operations);
     }
 }

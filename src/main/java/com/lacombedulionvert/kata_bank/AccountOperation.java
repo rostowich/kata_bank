@@ -3,6 +3,8 @@ package com.lacombedulionvert.kata_bank;
 import java.time.LocalDate;
 import java.util.Objects;
 
+import static com.lacombedulionvert.kata_bank.OperationType.*;
+
 public class AccountOperation {
 
     private LocalDate date;
@@ -30,6 +32,10 @@ public class AccountOperation {
         return amount;
     }
 
+    public int getSignedAmount(){
+        return operationType.equals(DEPOSIT) ? amount : amount*(-1);
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -41,5 +47,14 @@ public class AccountOperation {
     @Override
     public int hashCode() {
         return Objects.hash(date, operationType, amount);
+    }
+
+    @Override
+    public String toString() {
+        return "AccountOperation{" +
+                "date=" + date +
+                ", operationType=" + operationType +
+                ", amount=" + amount +
+                '}';
     }
 }
