@@ -1,7 +1,9 @@
 package com.lacombedulionvert.kata_bank;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static com.lacombedulionvert.kata_bank.OperationType.*;
 
@@ -34,6 +36,8 @@ public class AccountOperationRepository {
     }
 
     public List<AccountOperation> getHistory() {
-       return operations;
+        return operations.stream()
+                .sorted(Comparator.comparing(AccountOperation::getDate))
+                .collect(Collectors.toList());
     }
 }

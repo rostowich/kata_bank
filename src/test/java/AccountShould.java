@@ -48,7 +48,7 @@ public class AccountShould {
     public void print_a_statement() throws OperationNotSupportedException {
         List<AccountOperation> operations = Arrays.asList(new AccountOperation());
         given(accountOperationRepository.getHistory()).willReturn(operations);
-        account.printStatement();
+        account.seeOperationHistory();
         verify(accountOperationRepository).getHistory();
         verify(statementPrinter).print(operations);
     }

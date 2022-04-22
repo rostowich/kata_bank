@@ -1,7 +1,5 @@
 package com.lacombedulionvert.kata_bank;
 
-import javax.naming.OperationNotSupportedException;
-
 public class Account {
 
     private final AccountOperationRepository accountOperationRepository;
@@ -20,7 +18,7 @@ public class Account {
         accountOperationRepository.addWithdrawal(amount);
     }
 
-    public void printStatement() {
-        statementPrinter.print(accountOperationRepository.getHistory());
+    public String seeOperationHistory() {
+        return statementPrinter.print(accountOperationRepository.getHistory());
     }
 }

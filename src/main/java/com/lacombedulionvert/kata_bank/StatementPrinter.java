@@ -3,6 +3,7 @@ package com.lacombedulionvert.kata_bank;
 import java.util.List;
 
 public class StatementPrinter {
-    public void print(List<AccountOperation> operations) {
+    public String print(List<AccountOperation> operations) {
+        return null;
     }
 }

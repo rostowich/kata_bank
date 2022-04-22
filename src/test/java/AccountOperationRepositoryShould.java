@@ -27,22 +27,25 @@ public class AccountOperationRepositoryShould {
     private DateProvider dateProvider;
 
     private AccountOperationRepository accountOperationRepository;
-    List<AccountOperation> operations;
 
     @Before
     public void initialize(){
         accountOperationRepository = new AccountOperationRepository(dateProvider);
-        operations = accountOperationRepository.getHistory();
-        given(dateProvider.getCurrentDate()).willReturn(LocalDate.of(2022,04,21));
+        given(dateProvider.getCurrentDate())
+                .willReturn(LocalDate.of(2022,04,21))
+                .willReturn(LocalDate.of(2022,04,22));
 
     }
     @Test
     public void create_and_add_a_deposit_operation() {
-        assertThat(operations.size(), is(0)) ;
-        accountOperationRepository.addDeposit(300);
+        List<AccountOperation> historyBeforeDeposit = accountOperationRepository.getHistory();
+        assertThat(historyBeforeDeposit.size(), is(0)) ;
 
-        assertThat(operations.size(), is(1)) ;
-        assertThat(operations.get(0), is(new AccountOperation(
+        accountOperationRepository.addDeposit(300);
+        List<AccountOperation> historyAfterDeposit = accountOperationRepository.getHistory();
+
+        assertThat(historyAfterDeposit.size(), is(1)) ;
+        assertThat(historyAfterDeposit.get(0), is(new AccountOperation(
                 LocalDate.of(2022,04,21),
                 DEPOSIT,
                 300
@@ -50,16 +53,41 @@ public class AccountOperationRepositoryShould {
     }
 
     @Test
-    public void create_and_add_a_withdrawal_operation() throws OperationNotSupportedException {
-        assertThat(operations.size(), is(0)) ;
-        accountOperationRepository.addWithdrawal(250);
+    public void create_and_add_a_withdrawal_operation() {
+        List<AccountOperation> historyBeforeWithdrawal = accountOperationRepository.getHistory();
+        assertThat(historyBeforeWithdrawal.size(), is(0)) ;
 
-        assertThat(operations.size(), is(1)) ;
-        assertThat(operations.get(0), is(new AccountOperation(
+        accountOperationRepository.addWithdrawal(250);
+        List<AccountOperation> historyAfterWithdrawal = accountOperationRepository.getHistory();
+
+        assertThat(historyAfterWithdrawal.size(), is(1));
+        assertThat(historyAfterWithdrawal.get(0), is(new AccountOperation(
                 LocalDate.of(2022,04,21),
                 WITHDRAWAL,
                 250
         )));
+    }
 
+    @Test
+    public void return_history_of_operation(){
+        List<AccountOperation> initialHistory = accountOperationRepository.getHistory();
+        assertThat(initialHistory.size(), is(0)) ;
+
+        accountOperationRepository.addDeposit(300);
+        accountOperationRepository.addWithdrawal(250);
+
+        List<AccountOperation> expected = accountOperationRepository.getHistory();
+
+        assertThat(expected.size(), is(2));
+        assertThat(expected.get(0), is(new AccountOperation(
+                LocalDate.of(2022,04,21),
+                DEPOSIT,
+                300
+        )));
+        assertThat(expected.get(1), is(new AccountOperation(
+                LocalDate.of(2022,04,22),
+                WITHDRAWAL,
+                250
+        )));
     }
 }
