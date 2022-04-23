@@ -1,10 +1,11 @@
 package com.lacombedulionvert.kata_bank;
 
+import java.math.BigDecimal;
 import java.time.format.DateTimeFormatter;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
 public class OperationHistoryFormatter {
@@ -12,7 +13,7 @@ public class OperationHistoryFormatter {
     private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
     public String format(List<AccountOperation> operations) {
-        AtomicInteger currentBalance = new AtomicInteger(0);
+        AtomicReference<BigDecimal> currentBalance = new AtomicReference<>(BigDecimal.ZERO);
         List<String> operationFormattedInChronologicalOrder =
                 operations.stream()
                 .sorted(Comparator.comparing(AccountOperation::getDate))
@@ -26,14 +27,16 @@ public class OperationHistoryFormatter {
     }
 
     private String accountOperationFormatter(AccountOperation accountOperation,
-                                             AtomicInteger currentBalance){
+                                             AtomicReference<BigDecimal> currentBalance){
         return "["+accountOperation.getOperationType()
                 +", "
                 +accountOperation.getDate().format(formatter)
                 + ", "
                 +accountOperation.getAmount()
                 + ", "
-                +currentBalance.addAndGet(accountOperation.getSignedAmount())
+                +currentBalance.accumulateAndGet(
+                        accountOperation.getSignedAmount(),
+                        (balance, amount) -> balance.add(amount))
                 +"]";
     }
 }

@@ -5,6 +5,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -27,19 +28,19 @@ public class TestIntegrationShould {
         account = new Account(
                 new AccountOperationRepository(dateProvider),
                 new OperationHistoryFormatter(),
-                500);
+                new BigDecimal(500));
     }
 
     @Test
     public void add_account_operations_and_print_statement() throws NotEnoughAmountException {
 
-        account.makeDeposit(500);
-        account.makeWithdrawal(200);
-        account.makeWithdrawal(400);
+        account.makeDeposit(new BigDecimal(500.5));
+        account.makeWithdrawal(new BigDecimal(200.5));
+        account.makeWithdrawal(new BigDecimal(400));
 
-        String expectedValue ="[[WITHDRAWAL, 22/04/2022, 400, -100], "+
-                              "[WITHDRAWAL, 21/04/2022, 200, 300], "+
-                              "[DEPOSIT, 20/04/2022, 500, 500]]";
+        String expectedValue ="[[WITHDRAWAL, 22/04/2022, 400, -100.0], "+
+                              "[WITHDRAWAL, 21/04/2022, 200.5, 300.0], "+
+                              "[DEPOSIT, 20/04/2022, 500.5, 500.5]]";
 
         String result = account.seeOperationHistory();
         assertThat(result).isEqualTo(expectedValue);

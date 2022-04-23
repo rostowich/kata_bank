@@ -1,5 +1,6 @@
 package com.lacombedulionvert.kata_bank;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,7 +17,7 @@ public class AccountOperationRepository {
         operations = new ArrayList<>();
     }
 
-    public void addDeposit(int amount) {
+    public void addDeposit(BigDecimal amount) {
         AccountOperation deposit = new AccountOperation(
                 dateProvider.getCurrentDate(),
                 DEPOSIT,
@@ -25,7 +26,7 @@ public class AccountOperationRepository {
         operations.add(deposit);
     }
 
-    public void addWithdrawal(int amount) {
+    public void addWithdrawal(BigDecimal amount) {
         AccountOperation withdrawal = new AccountOperation(
                 dateProvider.getCurrentDate(),
                 WITHDRAWAL,

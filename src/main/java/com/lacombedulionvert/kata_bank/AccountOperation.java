@@ -1,5 +1,6 @@
 package com.lacombedulionvert.kata_bank;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Objects;
 
@@ -9,9 +10,9 @@ public class AccountOperation {
 
     private final LocalDate date;
     private final OperationType operationType;
-    private final int amount;
+    private final BigDecimal amount;
 
-    public AccountOperation(LocalDate date, OperationType operationType, int amount) {
+    public AccountOperation(LocalDate date, OperationType operationType, BigDecimal amount) {
         this.date = date;
         this.operationType = operationType;
         this.amount = amount;
@@ -25,12 +26,12 @@ public class AccountOperation {
         return operationType;
     }
 
-    public int getAmount() {
+    public BigDecimal getAmount() {
         return amount;
     }
 
-    public int getSignedAmount(){
-        return operationType.equals(DEPOSIT) ? amount : amount*(-1);
+    public BigDecimal getSignedAmount(){
+        return operationType.equals(DEPOSIT) ? amount : amount.negate();
     }
 
     @Override
@@ -38,7 +39,7 @@ public class AccountOperation {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         AccountOperation that = (AccountOperation) o;
-        return amount == that.amount && Objects.equals(date, that.date) && operationType == that.operationType;
+        return Objects.equals(amount, that.amount) && Objects.equals(date, that.date) && operationType == that.operationType;
     }
 
     @Override

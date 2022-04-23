@@ -1,25 +1,28 @@
 package com.lacombedulionvert.kata_bank;
 
+import java.math.BigDecimal;
+
 public class Account {
 
     private final AccountOperationRepository accountOperationRepository;
     private final OperationHistoryFormatter historyFormatter;
-    private final int overdraftAmount;
+    private final BigDecimal overdraftAmount;
 
     public Account(AccountOperationRepository accountOperationRepository,
                    OperationHistoryFormatter historyFormatter,
-                   int overdraftAmount) {
+                   BigDecimal overdraftAmount) {
         this.accountOperationRepository = accountOperationRepository;
         this.historyFormatter = historyFormatter;
         this.overdraftAmount = overdraftAmount;
     }
 
-    public void makeDeposit(int amount) {
+    public void makeDeposit(BigDecimal amount) {
         accountOperationRepository.addDeposit(amount);
     }
 
-    public void makeWithdrawal(int amount) throws NotEnoughAmountException {
-        if(amount > this.balance() + this.overdraftAmount)
+    public void makeWithdrawal(BigDecimal amount) throws NotEnoughAmountException {
+        BigDecimal authorizedAmountToWithdraw = this.balance().add(this.overdraftAmount);
+        if(amount.compareTo(authorizedAmountToWithdraw) > 0)
             throw new NotEnoughAmountException("Not enough amount in the account");
         accountOperationRepository.addWithdrawal(amount);
     }
@@ -28,9 +31,9 @@ public class Account {
         return historyFormatter.format(accountOperationRepository.getHistory());
     }
 
-    private int balance(){
+    private BigDecimal balance(){
         return accountOperationRepository.getHistory().stream()
-                    .mapToInt(AccountOperation::getSignedAmount)
-                    .sum();
+                    .map(AccountOperation::getSignedAmount)
+                    .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 }

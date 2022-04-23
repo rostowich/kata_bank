@@ -5,6 +5,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -29,17 +30,17 @@ public class TestAccountShould {
 
     @BeforeEach
     public void initialize(){
-        account = new Account(accountOperationRepository, statementPrinter, 500);
+        account = new Account(accountOperationRepository, statementPrinter, new BigDecimal(500));
         operations = new ArrayList<>();
         AccountOperation deposit = new AccountOperation(
                 LocalDate.of(2022, 4, 21),
                 DEPOSIT,
-                500
+                new BigDecimal(500)
         );
         AccountOperation withdrawal = new AccountOperation(
                 LocalDate.of(2022, 4, 22),
                 WITHDRAWAL,
-                400
+                new BigDecimal(400)
         );
         operations.add(deposit);
         operations.add(withdrawal);
@@ -47,15 +48,15 @@ public class TestAccountShould {
 
     @Test
     public void add_a_deposit_operation() {
-        account.makeDeposit(200);
-        verify(accountOperationRepository).addDeposit(200);
+        account.makeDeposit(new BigDecimal(200));
+        verify(accountOperationRepository).addDeposit(new BigDecimal(200));
     }
 
     @Test
     public void add_a_withdrawal_operation() throws NotEnoughAmountException {
         given(accountOperationRepository.getHistory()).willReturn(new ArrayList<>());
-        account.makeWithdrawal(200);
-        verify(accountOperationRepository).addWithdrawal(200);
+        account.makeWithdrawal(new BigDecimal(200));
+        verify(accountOperationRepository).addWithdrawal(new BigDecimal(200));
     }
 
     @Test
@@ -63,7 +64,7 @@ public class TestAccountShould {
         given(accountOperationRepository.getHistory()).willReturn(operations);
 
         Exception exception = assertThrows(NotEnoughAmountException.class,
-                () ->  account.makeWithdrawal(700));
+                () ->  account.makeWithdrawal(new BigDecimal(700)));
 
         Class<NotEnoughAmountException> exceptedException = NotEnoughAmountException.class;
         String expectedMessage = "Not enough amount in the account";
@@ -78,7 +79,7 @@ public class TestAccountShould {
         List<AccountOperation> operations = List.of(new AccountOperation(
                 LocalDate.now(),
                 DEPOSIT,
-                300
+                new BigDecimal(700)
         ));
         given(accountOperationRepository.getHistory()).willReturn(operations);
 

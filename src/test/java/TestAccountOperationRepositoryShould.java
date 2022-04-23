@@ -8,6 +8,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -37,14 +38,14 @@ public class TestAccountOperationRepositoryShould {
         List<AccountOperation> historyBeforeDeposit = accountOperationRepository.getHistory();
         assertThat(historyBeforeDeposit.size()).isZero();
 
-        accountOperationRepository.addDeposit(300);
+        accountOperationRepository.addDeposit(new BigDecimal(300.50));
         List<AccountOperation> historyAfterDeposit = accountOperationRepository.getHistory();
 
         assertThat(historyAfterDeposit.size()).isOne() ;
         assertThat(historyAfterDeposit.get(0)).isEqualTo(new AccountOperation(
                 LocalDate.of(2022,4,21),
                 DEPOSIT,
-                300
+                new BigDecimal(300.50)
         ));
     }
 
@@ -53,14 +54,14 @@ public class TestAccountOperationRepositoryShould {
         List<AccountOperation> historyBeforeWithdrawal = accountOperationRepository.getHistory();
         assertThat(historyBeforeWithdrawal.size()).isZero() ;
 
-        accountOperationRepository.addWithdrawal(250);
+        accountOperationRepository.addWithdrawal(new BigDecimal(250.50));
         List<AccountOperation> historyAfterWithdrawal = accountOperationRepository.getHistory();
 
         assertThat(historyAfterWithdrawal.size()).isOne();
         assertThat(historyAfterWithdrawal.get(0)).isEqualTo(new AccountOperation(
                 LocalDate.of(2022,4,21),
                 WITHDRAWAL,
-                250
+                new BigDecimal(250.50)
         ));
     }
 
@@ -69,8 +70,8 @@ public class TestAccountOperationRepositoryShould {
         List<AccountOperation> initialHistory = accountOperationRepository.getHistory();
         assertThat(initialHistory.size()).isZero() ;
 
-        accountOperationRepository.addDeposit(300);
-        accountOperationRepository.addWithdrawal(250);
+        accountOperationRepository.addDeposit(new BigDecimal(300));
+        accountOperationRepository.addWithdrawal(new BigDecimal(250));
 
         List<AccountOperation> expected = accountOperationRepository.getHistory();
 
@@ -78,12 +79,12 @@ public class TestAccountOperationRepositoryShould {
         assertThat(expected.get(0)).isEqualTo(new AccountOperation(
                 LocalDate.of(2022,4,21),
                 DEPOSIT,
-                300
+                new BigDecimal(300)
         ));
         assertThat(expected.get(1)).isEqualTo(new AccountOperation(
                 LocalDate.of(2022,4,22),
                 WITHDRAWAL,
-                250
+                new BigDecimal(250)
         ));
     }
 }
