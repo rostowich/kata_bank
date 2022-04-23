@@ -1,5 +1,6 @@
 import com.lacombedulionvert.kata_bank.AccountOperation;
 import com.lacombedulionvert.kata_bank.AccountOperationRepository;
+import com.lacombedulionvert.kata_bank.Datasource;
 import com.lacombedulionvert.kata_bank.DateProvider;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -27,7 +28,7 @@ public class TestAccountOperationRepositoryShould {
 
     @BeforeEach
     public void initialize(){
-        accountOperationRepository = new AccountOperationRepository(dateProvider);
+        accountOperationRepository = new AccountOperationRepository(dateProvider, new Datasource());
         given(dateProvider.getCurrentDate())
                 .willReturn(LocalDate.of(2022,4,21))
                 .willReturn(LocalDate.of(2022,4,22));
@@ -38,14 +39,14 @@ public class TestAccountOperationRepositoryShould {
         List<AccountOperation> historyBeforeDeposit = accountOperationRepository.getHistory();
         assertThat(historyBeforeDeposit.size()).isZero();
 
-        accountOperationRepository.addDeposit(new BigDecimal(300.50));
+        accountOperationRepository.addDeposit(new BigDecimal("300.50"));
         List<AccountOperation> historyAfterDeposit = accountOperationRepository.getHistory();
 
         assertThat(historyAfterDeposit.size()).isOne() ;
         assertThat(historyAfterDeposit.get(0)).isEqualTo(new AccountOperation(
                 LocalDate.of(2022,4,21),
                 DEPOSIT,
-                new BigDecimal(300.50)
+                new BigDecimal("300.50")
         ));
     }
 
@@ -54,14 +55,14 @@ public class TestAccountOperationRepositoryShould {
         List<AccountOperation> historyBeforeWithdrawal = accountOperationRepository.getHistory();
         assertThat(historyBeforeWithdrawal.size()).isZero() ;
 
-        accountOperationRepository.addWithdrawal(new BigDecimal(250.50));
+        accountOperationRepository.addWithdrawal(new BigDecimal("250.50"));
         List<AccountOperation> historyAfterWithdrawal = accountOperationRepository.getHistory();
 
         assertThat(historyAfterWithdrawal.size()).isOne();
         assertThat(historyAfterWithdrawal.get(0)).isEqualTo(new AccountOperation(
                 LocalDate.of(2022,4,21),
                 WITHDRAWAL,
-                new BigDecimal(250.50)
+                new BigDecimal("250.50")
         ));
     }
 

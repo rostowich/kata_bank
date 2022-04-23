@@ -26,7 +26,7 @@ public class TestIntegrationShould {
                 .willReturn(LocalDate.of(2022,4,21))
                 .willReturn(LocalDate.of(2022,4,22));
         account = new Account(
-                new AccountOperationRepository(dateProvider),
+                new AccountOperationRepository(dateProvider, new Datasource()),
                 new OperationHistoryFormatter(),
                 new BigDecimal(500));
     }
