@@ -34,8 +34,8 @@ public class TestIntegrationShould {
     @Test
     public void add_account_operations_and_print_statement() throws NotEnoughAmountException {
 
-        account.makeDeposit(new BigDecimal(500.5));
-        account.makeWithdrawal(new BigDecimal(200.5));
+        account.makeDeposit(new BigDecimal("500.5"));
+        account.makeWithdrawal(new BigDecimal("200.5"));
         account.makeWithdrawal(new BigDecimal(400));
 
         String expectedValue ="[[WITHDRAWAL, 22/04/2022, 400.00, -100.00], "+

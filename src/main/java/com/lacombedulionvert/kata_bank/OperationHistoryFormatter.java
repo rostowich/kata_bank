@@ -2,7 +2,6 @@ package com.lacombedulionvert.kata_bank;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.text.DecimalFormat;
 import java.time.format.DateTimeFormatter;
 import java.util.Collections;
 import java.util.Comparator;
@@ -36,7 +35,7 @@ public class OperationHistoryFormatter {
                 accountOperation.getAmount().setScale(2, RoundingMode.valueOf(2)),
                 currentBalance.accumulateAndGet(
                         accountOperation.getSignedAmount(),
-                        (balance, amount) -> balance.add(amount))
+                                BigDecimal::add)
                         .setScale(2, RoundingMode.valueOf(2)));
     }
 }

@@ -26,5 +26,5 @@ I want to see the history (operation, date, amount, balance) of my operations
 #### MAVEN 3.5.8
 
 ## Run the unit tests
-use the following command the the root folder of the projet: "mvn clean test"
+use the following command in the root folder of the project: "mvn clean test"
 
