@@ -38,9 +38,9 @@ public class TestIntegrationShould {
         account.makeWithdrawal(new BigDecimal(200.5));
         account.makeWithdrawal(new BigDecimal(400));
 
-        String expectedValue ="[[WITHDRAWAL, 22/04/2022, 400, -100.0], "+
-                              "[WITHDRAWAL, 21/04/2022, 200.5, 300.0], "+
-                              "[DEPOSIT, 20/04/2022, 500.5, 500.5]]";
+        String expectedValue ="[[WITHDRAWAL, 22/04/2022, 400.00, -100.00], "+
+                              "[WITHDRAWAL, 21/04/2022, 200.50, 300.00], "+
+                              "[DEPOSIT, 20/04/2022, 500.50, 500.50]]";
 
         String result = account.seeOperationHistory();
         assertThat(result).isEqualTo(expectedValue);

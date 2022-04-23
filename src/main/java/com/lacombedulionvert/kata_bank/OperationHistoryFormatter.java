@@ -1,6 +1,8 @@
 package com.lacombedulionvert.kata_bank;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.text.DecimalFormat;
 import java.time.format.DateTimeFormatter;
 import java.util.Collections;
 import java.util.Comparator;
@@ -28,15 +30,13 @@ public class OperationHistoryFormatter {
 
     private String accountOperationFormatter(AccountOperation accountOperation,
                                              AtomicReference<BigDecimal> currentBalance){
-        return "["+accountOperation.getOperationType()
-                +", "
-                +accountOperation.getDate().format(formatter)
-                + ", "
-                +accountOperation.getAmount()
-                + ", "
-                +currentBalance.accumulateAndGet(
+        return String.format("[%s, %s, %s, %s]",
+                accountOperation.getOperationType(),
+                accountOperation.getDate().format(formatter),
+                accountOperation.getAmount().setScale(2, RoundingMode.valueOf(2)),
+                currentBalance.accumulateAndGet(
                         accountOperation.getSignedAmount(),
                         (balance, amount) -> balance.add(amount))
-                +"]";
+                        .setScale(2, RoundingMode.valueOf(2)));
     }
 }
