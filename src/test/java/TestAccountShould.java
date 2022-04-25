@@ -73,6 +73,17 @@ public class TestAccountShould {
         assertInstanceOf(exceptedException, exception);
         assertEquals(actualMessage, expectedMessage);
     }
+    @Test
+    public void add_a_withdrawal_with_negative_amount(){
+        Exception exception = assertThrows(IllegalArgumentException.class,
+                () ->  account.makeWithdrawal(new BigDecimal(-700)));
+        Class<IllegalArgumentException> exceptedException = IllegalArgumentException.class;
+        String expectedMessage = "The amount is invalid";
+        String actualMessage = exception.getMessage();
+
+        assertInstanceOf(exceptedException, exception);
+        assertEquals(actualMessage, expectedMessage);
+    }
 
     @Test
     public void print_a_statement() {
