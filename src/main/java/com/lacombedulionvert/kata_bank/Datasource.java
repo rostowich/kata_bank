@@ -10,7 +10,7 @@ public class Datasource {
         operations = new ArrayList<>();
     }
 
-    public List<AccountOperation> getDataSource(){
+    public List<AccountOperation> getData(){
         return operations;
     }
 }

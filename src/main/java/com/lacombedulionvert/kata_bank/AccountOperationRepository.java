@@ -22,7 +22,7 @@ public class AccountOperationRepository {
                 DEPOSIT,
                 amount
         );
-        datasource.getDataSource().add(deposit);
+        datasource.getData().add(deposit);
     }
 
     public void addWithdrawal(BigDecimal amount) {
@@ -31,10 +31,10 @@ public class AccountOperationRepository {
                 WITHDRAWAL,
                 amount
         );
-        datasource.getDataSource().add(withdrawal);
+        datasource.getData().add(withdrawal);
     }
 
     public List<AccountOperation> getHistory() {
-        return datasource.getDataSource();
+        return datasource.getData();
     }
 }
